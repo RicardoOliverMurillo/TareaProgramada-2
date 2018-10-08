@@ -43,7 +43,7 @@ server <- function(input, output){
     summary(datosCompletos[input$sum])
   })
   
-  #funcion que verifica qye la entrada sea mayor a 1 y muestra los registros del número ingresado
+  #funcion que verifica que la entrada sea mayor a 1 y muestra los registros del número ingresado
   mostrarRegistro <- eventReactive(input$N,{
     x <- as.integer(input$Nregistros)
     print(str(x))
