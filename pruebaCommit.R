@@ -25,10 +25,10 @@ ui <- fluidPage(
   #textInput(inputId = "Nregistros", label = "Ingrese la cantidad de registros que desea ver"),
   textInput("Nregistros", "Ingrese la cantidad de registros que desea ver:"),
   actionButton(inputId = "N", "Mostrar registros"),
+  #conecta con el servidor
   dataTableOutput("tablaN"),
   
   h3("4. Histograma"),
- 
    #crea el comboBox para seleccionar la variable
   selectInput(inputId =  "var", label = "Seleccione una variable para generar histograma:", 
               colnames(datosCompletos[3:8])),
@@ -46,7 +46,6 @@ server <- function(input, output){
   #funcion que verifica que la entrada sea mayor a 1 y muestra los registros del número ingresado
   mostrarRegistro <- eventReactive(input$N,{
     x <- as.integer(input$Nregistros)
-    print(str(x))
     if(x>=1){
       datosCompletos[1:x,] #selecciona las filas
     }else{ #mensaje de error si el número es menor a 1
