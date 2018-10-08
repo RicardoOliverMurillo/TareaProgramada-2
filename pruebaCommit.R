@@ -6,10 +6,6 @@ datos <- read.csv("datosProyecto2.csv", header = TRUE, stringsAsFactors = FALSE,
 #Lectura de datos sin valores NA
 datosCompletos <- na.omit(datos)
 
-print(str(nrow(datos)))
-print("datos completos")
-print(str(nrow(datosCompletos)))
-
 #Parte de interfaz gráfica
 ui <- fluidPage(
   
