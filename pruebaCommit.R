@@ -25,7 +25,8 @@ server <- function(input, output){
   
   #Genera el gráfico a partir del output del id var
   output$hist <- renderPlot({
-    ggplot(data =datosCompletos, aes_string(x = input$var)) +geom_bar(width = 0.5)+ ggtitle("Histograma generado a partir de variable")+ xlab("Variable seleccionada")
+    ggplot(data =datosCompletos, aes_string(x = input$var)) +geom_bar(width = 0.5)+ ggtitle("Histograma generado a partir de variable")+ 
+      xlab(input$var)
   })
   
 }
