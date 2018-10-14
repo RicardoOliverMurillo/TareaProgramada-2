@@ -130,8 +130,8 @@ server <- function(input, output){
   #FUNCION 4
   #Genera el gráfico a partir del output del id var
   output$hist <- renderPlot({
-    ggplot(data =datosCompletos, aes_string(x = input$var)) +geom_bar()+ ggtitle("Histograma generado a partir de variable")+ 
-      xlab(input$var)+theme(panel.background = element_rect(fill = "pink"))
+    ggplot(data =datosCompletos, aes_string(x = input$var, fill = input$var )) +geom_bar()+ ggtitle("Histograma")+ 
+      xlab(input$var)
   })
   
   
@@ -152,10 +152,15 @@ server <- function(input, output){
       }
     }
     else{
-      box <- ggplot(data=datosCompletos, aes_string(x=input$x, y=input$y))
-      box + geom_boxplot(aes_string(fill=input$faceta)) + 
-        stat_summary(fun.y=mean, geom="point", shape=5, size=4) 
-
+      if(input$ver == "Columnas"){
+        f <- paste('~', input$faceta)
+        ggplot(datosCompletos, aes_string(x = input$x, y = input$y)) + 
+          geom_boxplot(aes_string(fill=input$x))+ facet_grid(f)
+      }else{
+        f <- paste(input$faceta,'~.')
+        ggplot(datosCompletos, aes_string(x = input$x, y = input$y)) + 
+          geom_boxplot(aes_string(fill=input$x))+ facet_grid(f)
+      }
     }
   })
   
