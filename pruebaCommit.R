@@ -1,10 +1,15 @@
 library(shiny)
 library(ggplot2)
 
+
 #Lectura de datos
 datos <- read.csv("datosProyecto2.csv", header = TRUE, stringsAsFactors = FALSE, sep = ';')
 #Lectura de datos sin valores NA
 datosCompletos <- na.omit(datos)
+
+print(str(nrow(datos)))
+print("datos completos")
+print(str(nrow(datosCompletos)))
 
 #Parte de interfaz gráfica
 ui <- fluidPage(
@@ -52,6 +57,11 @@ ui <- fluidPage(
   
   
   h3("5. Gráfico usando facetas"),
+  selectInput(inputId = "fac", label = "Seleccione tipo de gráfico", choices = c("Histograma", "Boxplot")),
+  selectInput(inputId = "x", label = "Seleccione primera variable (x)", colnames(datosCompletos[3:8])),
+  selectInput(inputId = "y", label = "Seleccione segunda variable (y)", colnames(datosCompletos[3:8])),
+  selectInput(inputId = "faceta", label = "Seleccione variable ha representar", colnames(datosCompletos[3:8])),
+  plotOutput("gFacetas"),
   
   
   
@@ -117,6 +127,17 @@ server <- function(input, output){
   })
   
   
+  #FUNCION 5
+  
+  output$gFacetas <- renderPlot({
+    if(input$fac == "Histograma"){
+      ggplot(datos, aes_string(x = input$x, y = input$y, fill = input$faceta))+ geom_bar(stat = "identity", position = position_dodge())
+    }
+    else{
+      ggplot(datosCompletos)+ geom_boxplot(aes_string(x = input$x, y = input$y, fill = input$faceta))
+
+    }
+  })
   
   #FUNCIÓN 6
   #funcion que verifica el filtro de la consulta
