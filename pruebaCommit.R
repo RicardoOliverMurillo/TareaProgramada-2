@@ -65,7 +65,7 @@ ui <- fluidPage(
   #crea el comboBox para seleccionar la segunda variable
   selectInput(inputId = "y", label = "Seleccione segunda variable (y)", colnames(datosCompletos[3:8])),
   #crea el comboBox para seleccionar la faceta
-  selectInput(inputId = "faceta", label = "Seleccione variable ha representar", colnames(datosCompletos[3:8])),
+  selectInput(inputId = "faceta", label = "Seleccione variable ha representar en la faceta", colnames(datosCompletos[3:8])),
   #crea el comboBox para seleccionar la orientación
   selectInput(inputId = "ver", label = "Seleccione como desea ver el gráfico", choices = c("Columnas", "Filas")),
   #manda a llamar el gráfico
@@ -154,15 +154,16 @@ server <- function(input, output){
     else{
       if(input$ver == "Columnas"){
         f <- paste('~', input$faceta)
-        ggplot(datosCompletos, aes_string(x = input$x, y = input$y)) + 
-          geom_boxplot(aes_string(fill=input$x))+ facet_grid(f)
+        ggplot(datosCompletos, aes_string(x = , y = input$y, group=input$x)) + geom_boxplot(aes_string(fill=input$x))+ 
+          facet_grid(f)
       }else{
         f <- paste(input$faceta,'~.')
-        ggplot(datosCompletos, aes_string(x = input$x, y = input$y)) + 
-          geom_boxplot(aes_string(fill=input$x))+ facet_grid(f)
+        ggplot(datosCompletos, aes_string(x = input$x, y = input$y,group=input$x)) + geom_boxplot(aes_string(fill=input$x))+
+          facet_grid(f)
       }
     }
   })
+  
   
   #FUNCIÓN 6
   #funcion que verifica el filtro de la consulta
