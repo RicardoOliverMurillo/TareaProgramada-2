@@ -1,5 +1,6 @@
 library(shiny)
 library(ggplot2)
+library(stringi)
 
 
 #Lectura de datos
@@ -65,6 +66,8 @@ ui <- fluidPage(
   selectInput(inputId = "y", label = "Seleccione segunda variable (y)", colnames(datosCompletos[3:8])),
   #crea el comboBox para seleccionar la faceta
   selectInput(inputId = "faceta", label = "Seleccione variable ha representar", colnames(datosCompletos[3:8])),
+  #crea el comboBox para seleccionar la orientación
+  selectInput(inputId = "ver", label = "Seleccione como desea ver el gráfico", choices = c("Columnas", "Filas")),
   #manda a llamar el gráfico
   plotOutput("gFacetas"),
   
@@ -132,17 +135,29 @@ server <- function(input, output){
   })
   
   
-  
   #FUNCION 5
+  #Genera el gráfico 
   output$gFacetas <- renderPlot({
-    if(input$fac == "Histograma"){ #verifica el tipo de gráfico
-      ggplot(datos, aes_string(x = input$x, y = input$y, fill = input$faceta))+ geom_bar(stat = "identity", position = position_dodge())
+    if(input$fac == "Histograma"){#Verifica el tipo de gráfico que desea visualizar
+      if(input$ver == "Columnas"){#verifica el tipo de orientación
+        f <- paste('~', input$faceta)#crea la horientazción por columna 
+        ggplot(datosCompletos, aes_string(x = input$x, y = input$y, fill = input$x )) + 
+          geom_histogram(stat = "identity",position = position_dodge())+ 
+          facet_grid(f)+ggtitle("Gráfico por facetas")
+      }else{
+        f <- paste(input$faceta,'~.')#crea la horientazción por fila 
+        ggplot(datosCompletos, aes_string(x = input$x, y = input$y, fill = input$x )) + 
+          geom_histogram(stat = "identity",position = position_dodge())+ 
+          facet_grid(f)+ggtitle("Gráfico por facetas")
+      }
     }
     else{
-      ggplot(datosCompletos)+ geom_boxplot(aes_string(x = input$x, y = input$y, fill = input$faceta))
+      box <- ggplot(data=datosCompletos, aes_string(x=input$x, y=input$y))
+      box + geom_boxplot(aes_string(fill=input$faceta)) + 
+        stat_summary(fun.y=mean, geom="point", shape=5, size=4) 
+
     }
   })
-  
   
   #FUNCIÓN 6
   #funcion que verifica el filtro de la consulta
