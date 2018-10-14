@@ -57,10 +57,15 @@ ui <- fluidPage(
   
   
   h3("5. Gráfico usando facetas"),
+  #crea el comboBox para seleccionar el tipo de gráfico
   selectInput(inputId = "fac", label = "Seleccione tipo de gráfico", choices = c("Histograma", "Boxplot")),
+  #crea el comboBox para seleccionar la primera variable
   selectInput(inputId = "x", label = "Seleccione primera variable (x)", colnames(datosCompletos[3:8])),
+  #crea el comboBox para seleccionar la segunda variable
   selectInput(inputId = "y", label = "Seleccione segunda variable (y)", colnames(datosCompletos[3:8])),
+  #crea el comboBox para seleccionar la faceta
   selectInput(inputId = "faceta", label = "Seleccione variable ha representar", colnames(datosCompletos[3:8])),
+  #manda a llamar el gráfico
   plotOutput("gFacetas"),
   
   
@@ -127,17 +132,17 @@ server <- function(input, output){
   })
   
   
-  #FUNCION 5
   
+  #FUNCION 5
   output$gFacetas <- renderPlot({
-    if(input$fac == "Histograma"){
+    if(input$fac == "Histograma"){ #verifica el tipo de gráfico
       ggplot(datos, aes_string(x = input$x, y = input$y, fill = input$faceta))+ geom_bar(stat = "identity", position = position_dodge())
     }
     else{
       ggplot(datosCompletos)+ geom_boxplot(aes_string(x = input$x, y = input$y, fill = input$faceta))
-
     }
   })
+  
   
   #FUNCIÓN 6
   #funcion que verifica el filtro de la consulta
